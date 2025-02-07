@@ -12,7 +12,7 @@ class ChatAdapter : RecyclerView.Adapter<ChatAdapter.ChatViewHolder>() {
 
     fun setMessages(newMessages: List<Message>) {
         messages.clear()
-        messages.addAll(newMessages)
+        messages.addAll(newMessages.filter { it.content.isNotBlank() }) // ✅ Remove empty messages
         notifyDataSetChanged()
     }
 
@@ -35,13 +35,14 @@ class ChatAdapter : RecyclerView.Adapter<ChatAdapter.ChatViewHolder>() {
         fun bind(message: Message) {
             if (message.role == "user") {
                 userMessage.text = message.content
-                userMessage.visibility = View.VISIBLE
+                userMessage.visibility = if (message.content.isNotBlank()) View.VISIBLE else View.GONE
                 assistantMessage.visibility = View.GONE
             } else {
                 assistantMessage.text = message.content
-                assistantMessage.visibility = View.VISIBLE
+                assistantMessage.visibility = if (message.content.isNotBlank()) View.VISIBLE else View.GONE
                 userMessage.visibility = View.GONE
             }
         }
     }
 }
+

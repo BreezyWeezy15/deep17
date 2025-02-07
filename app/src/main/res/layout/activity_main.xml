@@ -9,9 +9,19 @@
     tools:context=".MainActivity">
 
 
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Deep Seek"
+        android:textColor="@color/white"
+        android:layout_margin="10dp"
+        style="@style/TextAppearance.AppCompat.Medium"
+        android:fontFamily="sans-serif-condensed-medium"/>
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv"
         android:layout_width="match_parent"
+        android:layout_margin="10dp"
         android:layout_height="0dp"
         android:layout_weight="1"/>
 

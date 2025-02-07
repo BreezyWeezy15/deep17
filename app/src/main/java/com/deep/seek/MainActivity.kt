@@ -44,23 +44,29 @@ class MainActivity : AppCompatActivity() {
         adapter = ChatAdapter()
 
         recyclerView = findViewById(R.id.rv)
-        sendMessageImg  = findViewById(R.id.sendMessage)
+        sendMessageImg = findViewById(R.id.sendMessage)
         msgEditText = findViewById(R.id.messageEdit)
 
         recyclerView.layoutManager = LinearLayoutManager(this)
         recyclerView.adapter = adapter
 
         viewModel.messages.observe(this) { messages ->
-            adapter.setMessages(messages)
-            recyclerView.smoothScrollToPosition(adapter.itemCount - 1)
+            val filteredMessages = messages.filter { it.content.isNotBlank() } // ✅ Ensure no empty messages
+
+            if (filteredMessages.isNotEmpty()) {
+                adapter.setMessages(filteredMessages)
+
+                recyclerView.post {
+                    recyclerView.smoothScrollToPosition(filteredMessages.size - 1)
+                }
+            }
         }
 
         sendMessageImg.setOnClickListener {
+            val userMessage = msgEditText.text.toString().trim()
 
-            val userMessage = msgEditText.text.toString()
-
-            if(userMessage.isEmpty()){
-                Toast.makeText(this,"Query should not be empty",Toast.LENGTH_LONG).show()
+            if (userMessage.isBlank()) {
+                Toast.makeText(this, "Query should not be empty", Toast.LENGTH_LONG).show()
                 return@setOnClickListener
             }
 
@@ -68,5 +74,4 @@ class MainActivity : AppCompatActivity() {
             msgEditText.text.clear()
         }
     }
-
 }
